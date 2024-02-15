@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        #container {
+            display: flex;
+            align-items: center; /* Center items vertically within the container */
+        }
+
+        .box {
+            position: relative;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 5px;
+            transition: transform 0.3s ease-out;
+        }
+
+        #textBox1 {
+            transform-origin: center; /* Set transform origin to center for rotation */
+        }
+
+        #textBox2 {
+            width: 20px; /* Set a specific width for the second box */
+            margin-left: 20px; /* Adjust margin to position it to the right */
+        }
+
+        #questionText {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: rgb(222, 36, 185);
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const textBox1 = document.getElementById('textBox1');
+            const textBox2 = document.getElementById('textBox2');
+
+            document.addEventListener('mousemove', function (event) {
+                
+                    const mouseX = event.clientX;
+                    const mouseY = event.clientY;
+
+                    const boxRect1 = textBox1.getBoundingClientRect();
+                    const deltaX1 = mouseX - (boxRect1.left + boxRect1.width / 2);
+                    const deltaY1 = mouseY - (boxRect1.top + boxRect1.height / 2);
+
+                    const distance1 = Math.sqrt(deltaX1 * deltaX1 + deltaY1 * deltaY1);
+                    const distanceMultiplier = -3;
+
+                    if (distance1 < 100) { // Adjust the distance threshold as needed
+                        const angle1 = Math.atan2(deltaY1, deltaX1);
+                        const newX1 = (mouseX - (boxRect1.left + boxRect1.width / 2))* distanceMultiplier * Math.cos(angle1);
+                        const newY1 = (mouseY - (boxRect1.top + boxRect1.height / 2)) *distanceMultiplier * Math.sin(angle1);
+
+                        //console.log({angle: angle1, x1: newX1, y1: newY1, mouseX: mouseX, mouseY: mouseY, cos: Math.cos(angle1), sin: Math.sin(angle1), boxTop: boxRect1.top, boxLeft: boxRect1.left })
+
+                        // Check if the new position is within the page boundaries
+                        const maxX = window.innerWidth - boxRect1.width;
+                        const maxY = window.innerHeight - boxRect1.height;
+
+                        textBox1.style.transform = `translate(${newX1}px, ${newY1}px)`;
+                    }
+
+                    // Reset transform for the second box
+                    textBox2.style.transform = 'translate(0)';
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="questionText">Will you be my valentines?</div>
+    <div id="container">
+        <div id="textBox1" class="box">Yes</div>
+        <div id="textBox2" class="box">No</div>
+    </div>
+</body>
+</html>
